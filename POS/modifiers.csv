@@ -49,8 +49,6 @@ split;MOD
 splits;MOD
 strict;MOD
 triple;MOD
-up;MOD
-ups;MOD
 wall;MOD
 weighted;MOD
 lateral;MOD
@@ -68,10 +66,12 @@ backward;MOD
 backwards;MOD
 high;MOD
 low;MOD
-odd;MOD
-even;MOD
 kb;MOD
 sandbag;MOD
 bag;MOD
 stone;MOD
 atlas;MOD
+position;MOD
+unbroken;MOD
+plate;MOD
+ghd;MOD

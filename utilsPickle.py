@@ -9,6 +9,7 @@ def pickleDump(tagger, filename):
 #Eats a pickle
 def pickleLoad(filename):
   from cPickle import load
+  filename += '.pkl'
   input = open(filename, 'rb')
   var = load(input)
   input.close()

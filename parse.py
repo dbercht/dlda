@@ -43,14 +43,24 @@ def file2array(file):
 
 #Takes in a csv file as an array and voncerts it to a word/POS tuple array
 def array2POS(csvArray):
-  return dict((prepare(mod.split(";")[0]), mod.split(";")[1]) for mod in csvArray)
+  return dict((mod.split(";")[0], mod.split(";")[1]) for mod in csvArray)
 
 #Aggregates files to their POS
+#Takes in a csv file as an array and voncerts it to a word/POS tuple array
+def array2ResType(csvArray):
+  # (Result, num_movements, type)
+  return [(resType.split(";")[0], resType.split(";")[1], resType.split(";")[2]) for resType in csvArray]
+
 def files2POS(*files):
   arr = []
   for file in files:
     arr = arr + file2array(file)
   return array2POS(arr)
+
+def loadDump():
+  arr = []
+  return array2ResType(file2array('data/dump.csv'))
+
 
 #Pretty print
 def posAndWord(posTuples):
@@ -65,12 +75,12 @@ def posAndWord(posTuples):
 def findNoMov(tokens):
   count = 0
   for (i, tokenA) in enumerate(tokens):
-      noMov = True
+      movs = 0
       fixMe = False
       for (word, pos) in tokenA:
-        if pos == 'MOV' : noMov = False
+        if pos.startswith('MOV') : movs += 1
         if pos == 'FIXME' : fixMe = True
-      if noMov or fixMe: 
-        print i, tokenA
+      if fixMe or movs != 1: 
+        print i, movs, tokenA
         count += 1
   print "Total: %d" % (count)
