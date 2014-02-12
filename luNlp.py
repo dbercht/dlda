@@ -74,7 +74,13 @@ def testChunker(tests, title = ""):
   return (title, len(tests), errors, 100*(len(tests)-errors)/len(tests)) 
 
 def movements(chunk):
-  return [stringify(p) for p in chunk if type(p) is nltk.Tree and p.node == 'MOVEMENT']  
+  arr = []
+  for subtree in chunk:
+    if type(subtree) is nltk.Tree and subtree.node == 'MOVEMENT':
+      arr.append(stringify(subtree))
+    else:
+      arr +=  [stringify(p) for p in subtree if type(p) is nltk.Tree and p.node == 'MOVEMENT']
+  return arr
 
 def stringify(chunk):
   return " ".join([word for (word, pos) in chunk.leaves()])
