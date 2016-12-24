@@ -10,17 +10,19 @@ MOVEMENT: {<MOD>?<MOD>?<PART>?<TO>?<MOD|PART>+<MOV>?} #Movement must be refined
 MOVEMENT: {<MOVEMENT><AND><MOVP>}
 MOVEMENT: {<MOVEMENT>*<MOVP>}
 
-RESULT: {<CD>+<MAG(R|T)><AND><CD>+<MAG(R|T)>} #x minutes/rounds and y seconds/reps
 RESULT: }<CD><CD>+<MAG.*><MOV.*>{ #not scheming series if sequence after
-RESULT: {<FOR>?<CD>+<MAG.*>} #x, y, z MAG
+RESULT: {<CD>+<AND><CD><MAG.*>} #not scheming series if sequence after
+RESULT: {<CD><MAG.*>} #x, y, z MAG
+RESULT: {<FOR>?<CD><CD><CD>+<MAG.*>} #x, y, z MAG
+RESULT: {<RESULT><AND><RESULT>}
 
 TRACK: {<FOR><TRCK>} # for time/load/weight/distance
-
-SCHEME: {<CD><CD>+} #x,y,z
+SCHEME: {<CD><CD><CD>+} #x,y,z
 
 TRACKABLE: }<MOVEMENT|TRACKABLE><MOVEMENT>+<AT><RESULT>{
 TRACKABLE: {<CD>?<MOVEMENT><AT><RESULT>}
-TRACKABLE: {<CD><MOVEMENT>} #21 pullups
+TRACKABLE: {<CD><RESULT>?<MOVEMENT>} #21 pullups
+TRACKABLE: }<RESULT><MOVEMENT><RESULT><MOVEMENT>{
 TRACKABLE: {<RESULT>?<MOVEMENT><RESULT>?} #135 pound thruster
 """
   

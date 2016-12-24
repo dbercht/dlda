@@ -1,6 +1,10 @@
 from __future__ import division
 import nltk, luPos, luChunker, parse
 
+def analyze_sentence(sentence):
+    #  Double process for recursive purposes
+    return process(process(sentence))
+
 def process(result):
   import luChunker, luPos
   if type(result) is str:
@@ -22,7 +26,6 @@ def recreate(verbose = False):
   reload(luChunker)
   luPos.buildTagger(verbose)
   luChunker.buildPOSChunker(verbose)
-  luChunker.buildChunkChunker(verbose)
 
   tests = []
   tests.append(testMovements())
@@ -38,7 +41,7 @@ def testPOSChunks():
     els = []
     for t in process(process(result)):
       if type(t) is nltk.Tree:
-        els.append(t.node)
+        els.append(t.label())
       else:
         els.append(t[1])
     print result
@@ -76,10 +79,10 @@ def testChunker(tests, title = ""):
 def movements(chunk):
   arr = []
   for subtree in chunk:
-    if type(subtree) is nltk.Tree and subtree.node == 'MOVEMENT':
+    if type(subtree) is nltk.Tree and subtree.label() == 'MOVEMENT':
       arr.append(stringify(subtree))
     else:
-      arr +=  [stringify(p) for p in subtree if type(p) is nltk.Tree and p.node == 'MOVEMENT']
+      arr +=  [stringify(p) for p in subtree if type(p) is nltk.Tree and p.label() == 'MOVEMENT']
   return arr
 
 def stringify(chunk):
