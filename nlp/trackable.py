@@ -1,6 +1,6 @@
+import copy
 import nltk
 from nltk.tree import Tree
-import copy
 
 class Result:
   """Container class to hold results"""
