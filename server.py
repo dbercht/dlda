@@ -10,6 +10,9 @@ class MainHandler(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
         self.set_header('Access-Control-Allow-Headers', 'Content-Type')
 
+    def get(self):
+        self.write({'status': 'ok'})
+
     def post(self):
         wod = self.request.body
         if not wod:
