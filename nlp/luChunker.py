@@ -35,8 +35,5 @@ TRACKABLE: {<RESULT>?<MOVEMENT><RESULT>?} #135 pound thruster
 def chunkTags(sentence):
   return chunk(pickleLoad('POS_chunker'), sentence)
 
-def chunkChunks(chunks):
-  return chunk(pickleLoad('chunk_chunker'), chunks)
-
 def chunk(chunker, sentence):
   return chunker.parse(sentence)

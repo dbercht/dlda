@@ -59,7 +59,7 @@ def files2POS(*files):
 
 def loadDump():
   arr = []
-  return array2ResType(file2array('data/dump.csv'))
+  return array2ResType(file2array('./nlp/data/dump.csv'))
 
 
 #Pretty print

@@ -1,9 +1,11 @@
+import random
 import copy
 import nltk
 from nltk.tree import Tree
 
 class Result:
   """Container class to hold results"""
+
   types = dict({
     'MAGT' : 'time',
     'MAGW' : 'weight',
@@ -12,19 +14,22 @@ class Result:
     'CD' : 'cycle',
     'MAGR' : 'cycle'
     })
+
   def __init__(self, resultTuple):
+    self.id_ = random.getrandbits(128)
     self.chunk = resultTuple
     resType = resultTuple[-1][1]
-    #defaults to cycles
+    #  defaults to cycles
     self.typ = self.types.get(resType, 'cycle')
     self.value = chunkToString(resultTuple)
     self.values = [val for (val, pos) in resultTuple if pos == 'CD']
     self.unit = next((val for (val, pos) in resultTuple if pos.startswith('MAG')), "")
-     
+
   def todict(self):
     return { "type"   : self.typ,
-             "value" : self.values,
-             "unit" : self.unit
+             "values" : self.values,
+             "unit" : self.unit,
+             "id": self.id_,
              }
 
   def tostring(self, indent = 0):
@@ -35,6 +40,7 @@ class Result:
 class Trackable:
     """Class to handle trackables"""
     def __init__(self, movement = "", results = None, typ = None, trackables = None, chunk=None):
+      self.id_ = random.getrandbits(128)
       self.chunk = chunk
       self.movement = movement
       self.results = results
@@ -49,7 +55,8 @@ class Trackable:
                "results" : [r.todict() for r in self.results],
                "type" : self.typ,
                "fixmes" : self.fixmes,
-               "trackables" : [t.todict() for t in self.trackables]
+               "trackables" : [t.todict() for t in self.trackables],
+               "id": self.id_,
                }
     def tostring(self, indent = 0):
       tab = "".join([" " for x in range(indent)])
@@ -74,28 +81,22 @@ class Builder:
         elif node == 'MOVEMENT': trackable.movement = chunkToString(subtree) 
         elif node == 'RESULT' or node == 'SCHEME': results += buildResults(subtree)
         else:
-          fixmes.append(subtree)
+            fixmes.append({'word': subtree[0], 'pos': subtree[1], 'id': random.getrandbits(128) })
       else:
         if type(subtree) is tuple:
           if subtree[1] == 'CD':
             results.append(Result([subtree]))
           else:
-            fixmes.append(subtree)
+            fixmes.append({'word': subtree[0], 'pos': subtree[1], 'id': random.getrandbits(128) })
 
     distTrac = []
     for result in results:
-      print "Results"
-      print type(result.value)
       if len(result.values) > 1:
-        print "List"
         for r in result.values:
-          print r
           for t in nestedTrackables:
-            print t
             res = copy.deepcopy(result)
             res.values = [r]
             track = copy.deepcopy(t)
-            print res.tostring()
             track.results.append(res)
             distTrac.append(track)
 

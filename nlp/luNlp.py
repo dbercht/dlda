@@ -1,16 +1,12 @@
-from __future__ import division
+import re
 import nltk, luPos, luChunker, parse
 
-def analyze_sentence(sentence):
-    #  Double process for recursive purposes
-    return process(process(sentence))
+def analyze_wod(sentence):
+    return process(sentence)
 
 def process(result):
   import luChunker, luPos
-  if type(result) is str:
-    return luChunker.chunkTags(luPos.tag_sentence(result))
-  else:
-    return luChunker.chunkChunks(result)
+  return luChunker.chunkTags(luPos.tag_sentence(result))
 
 def processDump():
   import parse
@@ -55,7 +51,7 @@ def testDump():
   return testChunker(tests, "Dump")
 
 def testMovements():
-  movements = [(movement, 1, "") for movement in parse.file2array('data/movements.csv')]
+  movements = [(movement, 1, "") for movement in parse.file2array('./nlp/data/movements.csv')]
   return testChunker(movements, "Movements") 
 
 def testChunker(tests, title = ""):
@@ -88,3 +84,5 @@ def movements(chunk):
 def stringify(chunk):
   return " ".join([word for (word, pos) in chunk.leaves()])
 
+if __name__ =='__main__':
+    recreate()

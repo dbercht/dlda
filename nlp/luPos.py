@@ -2,21 +2,17 @@ from parse import saveTaggedSent, printFreqDist, getFreqDist, file2array, findNo
 import utilsPickle
 
 def buildTagger(verbose=False):
-  movements = file2array('data/movements.csv')
+  movements = file2array('./nlp/data/movements.csv')
   print "---------Building Unigrammer"
   unigrammer = buildUnigrammer()
   tokens = tag_sentences(unigrammer, movements)
   if verbose: findNoMov(tokens) 
-  print "---------Fixing initial tokenization"
- # data['tokens'][10] = [('muscle', 'MOV'), ('up', 'MOD')]
- # data['tokens'][11] =  [('bar', 'MOD'), ('muscle', 'MOV'), ('up', 'MOD')]
- # data['tokens'][12] =  [('ring', 'MOD'), ('muscle', 'MOV'), ('up', 'MOD')]
   print "---------Building Bigrammer"
   bigrammer = buildBigrammer(tokens, unigrammer)
   tokens = tag_sentences(bigrammer, movements)
   if verbose: findNoMov(tokens)
   utilsPickle.pickleDump(bigrammer, 'tagger')
-  saveTaggedSent(tokens, 'data/tagged_movements.csv')
+  saveTaggedSent(tokens, './nlp/data/tagged_movements.csv')
 
   if verbose: printFreqDist(getFreqDist(tokens))
   return bigrammer
@@ -36,7 +32,7 @@ def buildBigrammer(tokens, backoff_tagger):
 
 def buildTrigrammer(tokens, backoff_tagger):
   import nltk
-  movements = file2array('data/movements.csv')
+  movements = file2array('./nlp/data/movements.csv')
   trigram_tagger = nltk.TrigramTagger(tokens, backoff=backoff_tagger)
   tokens = tag_sentences(trigram_tagger, movements)
   findNoMov(tokens)
@@ -44,11 +40,13 @@ def buildTrigrammer(tokens, backoff_tagger):
 
 def prepare(word):
   import re
-  return re.sub(r'[^a-z0-9#@&%]', ' ', word.lower()).strip()
+  word = re.sub(r'[^a-z0-9#@&%]', ' ', word.replace('\\n', ' ').replace('\\r', '').lower()).strip()
+  word = ' '.join(word.split())  # remove multiple whitespaces
+  return word
 
 #Gets the POS of all the necessary files
 def getPOS():
-  pos = files2POS('POS/parts.csv', 'POS/movements.csv', 'POS/modifiers.csv', 'POS/magnitudes.csv', 'POS/prepositions.csv', 'POS/completions.csv', 'POS/trackables.csv')
+  pos = files2POS('./nlp/POS/parts.csv', './nlp/POS/movements.csv', './nlp/POS/modifiers.csv', './nlp/POS/magnitudes.csv', './nlp/POS/prepositions.csv', './nlp/POS/completions.csv', './nlp/POS/trackables.csv')
   return dict([(prepare(word), pos[word]) for word in pos.keys()])
 
 def tag_sentences(tagger, sentences):
