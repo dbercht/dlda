@@ -8,7 +8,7 @@ application = Flask(__name__)
 CORS(application)
 
  ## Bootstrapping the pickles
- recreate()
+recreate()
 
 @application.route("/", methods=['GET'])
 def get():
