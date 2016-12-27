@@ -1,11 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from nlp.luNlp import analyze_wod
+from nlp.luNlp import analyze_wod, recreate
 from nlp.trackable import Builder
 
 application = Flask(__name__)
 CORS(application)
+
+ ## Bootstrapping the pickles
+ recreate()
 
 @application.route("/", methods=['GET'])
 def get():
