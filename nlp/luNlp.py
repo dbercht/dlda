@@ -1,12 +1,13 @@
 import re
-import nltk, luPos, luChunker, parse
+import nltk, luNum, luPos, luChunker, parse
 
 def analyze_wod(sentence):
     return process(sentence)
 
 def process(result):
   import luChunker, luPos
-  return luChunker.chunkTags(luPos.tag_sentence(result))
+  tagged_tree = luPos.tag_sentence(result)
+  return luChunker.chunkTags(tagged_tree)
 
 def processDump():
   import parse

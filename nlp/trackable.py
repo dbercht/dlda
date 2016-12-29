@@ -1,18 +1,27 @@
 import random
 import copy
 import nltk
+from enum import Enum
 from nltk.tree import Tree
+
+class Type(Enum):
+    #  TODO: Allow alias, e.g. 'load' should be 'weight'
+    TIME = 'time'
+    WEIGHT = 'weight'
+    ENERGY = 'energy'
+    DISTANCE = 'distance'
+    CYCLE = 'cycle'
 
 class Result:
   """Container class to hold results"""
 
   types = dict({
-    'MAGT' : 'time',
-    'MAGW' : 'weight',
-    'MAGE' : 'energy',
-    'MAGD' : 'distance',
-    'CD' : 'cycle',
-    'MAGR' : 'cycle'
+    'MAGT': Type.TIME,
+    'MAGW': Type.WEIGHT,
+    'MAGE': Type.ENERGY,
+    'MAGD': Type.DISTANCE,
+    'CD': Type.CYCLE,
+    'MAGR': Type.CYCLE,
     })
 
   def __init__(self, resultTuple):
@@ -26,7 +35,7 @@ class Result:
     self.unit = next((val for (val, pos) in resultTuple if pos.startswith('MAG')), "")
 
   def todict(self):
-    return { "type"   : self.typ,
+    return { "type"   : self.typ.value if self.typ else None,
              "values" : self.values,
              "unit" : self.unit,
              "id": self.id_,
@@ -53,7 +62,7 @@ class Trackable:
       return { "movement" : self.movement,
                "certainty" : self.certainty,
                "results" : [r.todict() for r in self.results],
-               "type" : self.typ,
+               "type" : self.typ.value if self.typ else None,
                "fixmes" : self.fixmes,
                "trackables" : [t.todict() for t in self.trackables],
                "id": self.id_,
@@ -80,6 +89,10 @@ class Builder:
         if node == 'TRACKABLE': nestedTrackables.append(Builder.build(subtree))
         elif node == 'MOVEMENT': trackable.movement = chunkToString(subtree) 
         elif node == 'RESULT' or node == 'SCHEME': results += buildResults(subtree)
+        elif node == 'TRACK': 
+            tracking = [ele for ele in subtree if ele[1] == 'TRCK']
+            if tracking:
+                trackable.typ = Type(tracking[0][0])
         else:
             fixmes.append({'word': subtree[0], 'pos': subtree[1], 'id': random.getrandbits(128) })
       else:
@@ -89,6 +102,7 @@ class Builder:
           else:
             fixmes.append({'word': subtree[0], 'pos': subtree[1], 'id': random.getrandbits(128) })
 
+    #  distributing the multiple result values tot he child trackables
     distTrac = []
     for result in results:
       if len(result.values) > 1:

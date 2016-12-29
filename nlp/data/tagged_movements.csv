@@ -2,7 +2,7 @@ clean/MOV
 abmat/MOD;situps/MOVP
 air/MOD;squat/MOV
 atlas/MOD;stone/MOD;to/TO;shoulder/PART
-ball/MOD;slams/MOVP
+ball/MOV;slams/MOVP
 bar/MOD;muscle/MOD;up/MOV
 barbell/MOD;burpees/MOVP
 barbell/MOD;overhead/MOD;walking/MOD;lunges/MOVP
@@ -95,7 +95,7 @@ toes/PART;to/TO;bar/MOD
 triceps/PART;dip/MOV
 walking/MOD;lunge/MOV
 walking/MOD;lunge/MOV;step/MOV
-wall/MOD;ball/MOD;shot/MOV
+wall/MOD;ball/MOV;shot/MOV
 weighted/MOD;pull/MOV;up/MOV
 split/MOD;clean/MOV;and/AND;jerks/MOVP
 kettlebell/MOD;clean/MOV;and/AND;jerks/MOVP

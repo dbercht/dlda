@@ -46,7 +46,15 @@ def prepare(word):
 
 #Gets the POS of all the necessary files
 def getPOS():
-  pos = files2POS('./nlp/POS/parts.csv', './nlp/POS/movements.csv', './nlp/POS/modifiers.csv', './nlp/POS/magnitudes.csv', './nlp/POS/prepositions.csv', './nlp/POS/completions.csv', './nlp/POS/trackables.csv')
+  pos = files2POS(
+    './nlp/POS/completions.csv',
+    './nlp/POS/magnitudes.csv',
+    './nlp/POS/modifiers.csv',
+    './nlp/POS/movements.csv',
+    './nlp/POS/parts.csv',
+    './nlp/POS/prepositions.csv',
+    './nlp/POS/trackables.csv',
+  )
   return dict([(prepare(word), pos[word]) for word in pos.keys()])
 
 def tag_sentences(tagger, sentences):
