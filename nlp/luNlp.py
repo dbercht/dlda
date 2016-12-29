@@ -1,5 +1,5 @@
 import re
-import nltk, luNum, luPos, luChunker, parse
+import nltk, luPos, luChunker, parse
 
 def analyze_wod(sentence):
     return process(sentence)
